@@ -36,7 +36,7 @@ class Order < ActiveRecord::Base
     }
     components = components.select { |k,v| v != 0 }.map{ |k,v| "#{number_to_currency(v)} #{k}" }.join(' + ')
     components << " - #{number_to_currency(charge.discount.abs)} discount" if charge.discount != 0
-    charge_params = { 
+    charge_params = {
       user_id: charge.contact_venmo_user_id,
       note: [self.restaurant, components].join(' | '),
       amount: charge.total.abs * -1
