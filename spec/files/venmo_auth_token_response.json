@@ -1,0 +1,22 @@
+{
+  "token_type": "bearer",
+  "user": {
+    "username": "becarella",
+    "first_name": "Bec",
+    "last_name": "Carella",
+    "display_name": "Bec Carella",
+    "is_friend": false,
+    "friends_count": 56,
+    "about": "I buy a lot of lunches",
+    "email": "bec@example.com",
+    "phone": null,
+    "profile_picture_url": "https://example.com/pic.jpg",
+    "friend_request": null,
+    "trust_request": null,
+    "id": "123456",
+    "date_joined": "2012-01-03T18:19:38"},
+  "balance": null,
+  "access_token": "access_token_123",
+  "refresh_token": "refresh_token_456",
+  "expires_at": 1404080833
+}
