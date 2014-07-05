@@ -14,3 +14,7 @@ test:
   pool: 5
   username: 
   password: 
+
+
+production:
+  adapter: postgresql
