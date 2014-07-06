@@ -71,6 +71,7 @@ class Order < ActiveRecord::Base
       json[:items].each do |item_json|
         Charge.from_seamless_json(order, item_json)
       end
+      order
     end
   end
 
@@ -79,7 +80,7 @@ class Order < ActiveRecord::Base
     
     data = {site: 'Seamless'}
     data[:order_number] = doc.css('h2 span').first.content.gsub('#', '').strip
-    data[:restaurant] = doc.css('h2:nth-child(1)').first.content.strip
+    data[:restaurant] = doc.css('h2').first.content.strip
     data[:subtotal] = doc.css('#ProductTotal').first.content.gsub('$', '').strip.to_f
     doc.css('#ProductTotal').first.parent.parent.remove
     if doc.css('#TipAmount').length > 0

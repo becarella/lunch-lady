@@ -20,8 +20,26 @@ require "rails_helper"
 
 describe Order do
 
+  context 'no tip' do 
+    before do
+      @user = VenmoUser.create(email: 'becarella@gmail.com')
+      html = File.read("#{Rails.root}/spec/files/seamless_order_494593308.html")
+      @order = Order.from_seamless!(@user, html)
+    end
+
+    specify do
+      expect(@order).to_not be_nil
+      expect(@order.restaurant).to eq("An Choi")
+    end
+
+
+
+  end
+
   before do
     Order.stub(:charge_contact_on_venmo).and_return(1234)
   end
+
+
 
 end

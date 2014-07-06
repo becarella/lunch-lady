@@ -18,6 +18,8 @@
 
 class VenmoUser < ActiveRecord::Base
 
+  has_many :orders, foreign_key: :user_id
+
   def get_venmo_friends
     next_url = "https://api.venmo.com/v1/users/795632440705024409/friends?limit=20"
     while !next_url.nil?
