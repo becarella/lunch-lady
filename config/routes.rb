@@ -54,6 +54,7 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
+  resources :orders
   post '/orders/new_email' => 'orders#new_email'
 
   get '/venmo/authorize'  => 'venmo#authorize'
