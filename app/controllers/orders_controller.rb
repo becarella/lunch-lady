@@ -5,5 +5,4 @@ class OrdersController < ApplicationController
     render json: params
   end
 
-
 end
