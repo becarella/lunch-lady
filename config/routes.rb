@@ -54,6 +54,8 @@ Rails.application.routes.draw do
   #     resources :products
   #   end
 
+  post '/orders/new_email' => 'orders#new_email'
+
   get '/venmo/authorize'  => 'venmo#authorize'
   get '/venmo/callback'  => 'venmo#callback', as: :venmo_callback
 end
