@@ -9,6 +9,9 @@ class OrdersController < ApplicationController
     Rails.logger.info "NEW_EMAIL WROTE TO FILE"
     File.new('/tmp/seamless_order.html').save_to_s3('lunch_lady', 'orders', 'seamless_order.html')
     Rails.logger.info "NEW_EMAIL SAVED TO S3"
+
+    Rails.logger.info "FILE CONTENTS:"
+    File.read('/tmp/seamless_order.html')
     # Order.from_seamless!(user, params[:html])
     # Rails.logger.info "ORDER: #{order.inspect}"
     # render json: params
