@@ -2,8 +2,8 @@ class OrdersController < ApplicationController
 
   def new_email
     # user = VenmoUser.find_by_email(params[:envelope][:from])
-    Rails.logger.info "NEW_EMAIL WRITING TO FILE"
-    File.write('/tmp/seamless_order.html', params[:html])
+    Rails.logger.info "NEW_EMAIL WRITING TO FILE #{params[:html].encoding}"
+    File.write('/tmp/seamless_order.html', params[:html].force_encoding("UTF-8"))
     Rails.logger.info "NEW_EMAIL WROTE TO FILE"
     f = File.new('/tmp/seamless_order.html')
     Rails.logger.info "NEW_EMAIL SAVING TO S3"
