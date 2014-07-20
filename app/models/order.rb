@@ -88,7 +88,7 @@ class Order < ActiveRecord::Base
       data[:tip] = 0.0
     end
     begin
-      data[:discount] = doc.search("[text()*='Discount']").first.ancestors('tr').search("[text()*='$']").first.content.gsub('$', '').strip.to_f
+      data[:discount] = doc.search("[text()*='Restaurant Deal']").first.ancestors('tr').search("[text()*='$']").first.content.gsub(/[$\(\)]/, '').strip.to_f.abs * -1
     rescue
       data[:discount] = 0.0
     end

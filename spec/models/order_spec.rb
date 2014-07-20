@@ -51,4 +51,18 @@ describe Order do
     end
   end
 
+  context 'restaurant deal' do
+    before do
+      @user = VenmoUser.create(email: 'becarella@gmail.com')
+      html = File.read("#{Rails.root}/spec/files/seamless_order_509624082.html")
+      @order = Order.from_seamless!(@user, html)    
+    end
+
+    specify do
+      expect(@order).to_not be_nil
+      expect(@order.discount).to eq(-7.69)
+    end
+  end
+  
+
 end
