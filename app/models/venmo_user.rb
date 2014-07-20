@@ -23,12 +23,9 @@ class VenmoUser < ActiveRecord::Base
   def get_venmo_friends
     next_url = "https://api.venmo.com/v1/users/795632440705024409/friends?limit=20"
     while !next_url.nil?
-      puts next_url
       response = JSON.parse(token.get(next_url).body)
-      puts response
       Contact.from_venmo self, response['data']
       next_url = response['pagination']['next']
-
     end
 
   end

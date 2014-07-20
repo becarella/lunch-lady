@@ -20,6 +20,10 @@ require "rails_helper"
 
 describe Order do
 
+  before do
+    Order.stub(:charge_contact_on_venmo).and_return(1234)
+  end
+
   context 'no tip' do 
     before do
       @user = VenmoUser.create(email: 'becarella@gmail.com')
@@ -31,15 +35,20 @@ describe Order do
       expect(@order).to_not be_nil
       expect(@order.restaurant).to eq("An Choi")
     end
-
-
-
-  end
-
-  before do
-    Order.stub(:charge_contact_on_venmo).and_return(1234)
   end
 
 
+  context 'forwarded email' do
+    before do
+      @user = VenmoUser.create(email: 'becarella@gmail.com')
+      html = File.read("#{Rails.root}/spec/files/forwarded_order.html")
+      @order = Order.from_seamless!(@user, html)    
+    end
+
+    specify do
+      expect(@order).to_not be_nil
+      expect(@order.restaurant).to eq("Mooncake Foods (Watts St)")
+    end
+  end
 
 end

@@ -77,50 +77,38 @@ class Order < ActiveRecord::Base
 
   def self.parse_seamless html
     doc = Nokogiri::HTML(html)
-    
     data = {site: 'Seamless'}
-    data[:order_number] = doc.css('h2 span').first.content.gsub('#', '').strip
-    data[:restaurant] = doc.css('h2').first.content.strip
-    data[:subtotal] = doc.css('#ProductTotal').first.content.gsub('$', '').strip.to_f
-    doc.css('#ProductTotal').first.parent.parent.remove
-    if doc.css('#TipAmount').length > 0
-      data[:tip] = doc.css('#TipAmount').first.content.gsub('$', '').strip.to_f 
-      doc.css('#TipAmount').first.parent.parent.remove
-    else
+    data[:order_number] = doc.search("[text()*='Order']").first.content.match(/\d+/)[0]
+    data[:restaurant] = doc.search("[text()*='Order']").first.ancestors('tr').first.css('td').first.content.strip.split(/\n/).first.strip
+    data[:subtotal] = doc.search("[text()*='Product Total']").first.ancestors('tr').search("[text()*='$']").first.content.gsub('$', '').strip.to_f
+    data[:tax] = doc.search("[text()*='Sales Tax']").first.ancestors('tr').search("[text()*='$']").first.content.gsub('$', '').strip.to_f
+    begin
+      data[:tip] = doc.search("[text()*='Tip']").first.ancestors('tr').search("[text()*='$']").first.content.gsub('$', '').strip.to_f
+    rescue
       data[:tip] = 0.0
     end
-    if doc.css('#P3').length > 0
-      data[:discount] = doc.css('#P3').first.content.gsub(/[$\(\)]/, '').strip.to_f.abs * -1
-      doc.css('#P3').first.parent.parent.remove
-    else
+    begin
+      data[:discount] = doc.search("[text()*='Discount']").first.ancestors('tr').search("[text()*='$']").first.content.gsub('$', '').strip.to_f
+    rescue
       data[:discount] = 0.0
     end
-    data[:tax] = doc.css('#SalesTax').first.content.gsub('$', '').strip.to_f
-    doc.css('#SalesTax').first.parent.parent.remove
-    data[:total] = doc.css('#GrandTotal strong').first.content.gsub('$', '').strip.to_f
-    doc.css('#GrandTotal').first.parent.parent.remove
+    data[:total] = doc.search("[text()*='Grand Total']").first.ancestors('tr').search("[text()*='$']").first.content.gsub('$', '').strip.to_f
 
     items = [];
-    current_item = {};
     count = 0;
-    doc.css('table:nth-child(3) tr').each do |node|
-      begin
-        if count % 2 == 0  # order summary
-          current_item[:memo] = node.css('td:nth-child(2) p strong').first.content.strip
-          current_item[:subtotal] = node.css('td:nth-child(6) p').first.content.strip.gsub('$', '').to_f
-          current_item[:tax] = (current_item[:subtotal] / data[:subtotal] * data[:tax]).round(2)
-          current_item[:tip] = (current_item[:subtotal] / data[:subtotal] * data[:tip]).round(2)
-          current_item[:discount] = (current_item[:subtotal] / data[:subtotal] * data[:discount]).round(2)
-        else               # order special instructions
-          current_item[:nickname] = node.css('td:nth-child(2) ul li strong').first.content.strip.match(/\b[A-Z]+\b/)[0]
-          items.push(current_item)
-          current_item = {}
-        end
-      rescue => e
-        Rails.logger.error e.message
-        Rails.logger.error node.content
-      end
-      count += 1
+    doc.search("[text()*='Special Instructions']").each do |node|
+      order = node.ancestors('tr').first.parent.css('tr')
+      current_item = {
+        nickname: node.content.strip.match(/\b[A-Z]+\b/)[0],
+        memo: order.css('td')[2].content.strip,
+        subtotal: order.css('td')[6].content.strip.gsub('$', '').to_f
+      }
+      current_item.merge!({
+        tax: (current_item[:subtotal] / data[:subtotal] * data[:tax]).round(2),
+        tip: (current_item[:subtotal] / data[:subtotal] * data[:tip]).round(2),
+        discount: (current_item[:subtotal] / data[:subtotal] * data[:discount]).round(2)
+      })
+      items.push(current_item)
     end
     
     data[:items] = items

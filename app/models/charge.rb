@@ -21,7 +21,6 @@ class Charge < ActiveRecord::Base
     charge_json.symbolize_keys!
     charge_json[:user_id] = order.user_id
     charge_json[:order_id] = order.id
-    puts order.inspect
     charge_json[:contact_id] = Contact.find_by(user_id: order.user_id, nickname: charge_json.delete(:nickname)).try(:id)
     Charge.create(charge_json)
   end
