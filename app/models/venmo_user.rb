@@ -21,7 +21,7 @@ class VenmoUser < ActiveRecord::Base
   has_many :orders, foreign_key: :user_id
 
   def get_venmo_friends
-    next_url = "https://api.venmo.com/v1/users/795632440705024409/friends?limit=20"
+    next_url = "https://api.venmo.com/v1/users/#{venmo_user_id}/friends?limit=20"
     while !next_url.nil?
       response = JSON.parse(token.get(next_url).body)
       Contact.from_venmo self, response['data']
