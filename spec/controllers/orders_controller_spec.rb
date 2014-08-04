@@ -5,7 +5,7 @@ describe OrdersController do
 
   describe 'new_email' do
     before do
-      @user = VenmoUser.create(email: 'becarella@gmail.com')
+      @user = User.create(email: 'becarella@gmail.com')
 
       post :new_email, {
         envelope: {

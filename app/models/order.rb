@@ -13,6 +13,7 @@
 #  tax           :float
 #  created_at    :datetime
 #  updated_at    :datetime
+#  discount      :float            default(0.0)
 #
 
 class Order < ActiveRecord::Base
@@ -37,7 +38,7 @@ class Order < ActiveRecord::Base
     components = components.select { |k,v| v != 0 }.map{ |k,v| "#{number_to_currency(v)} #{k}" }.join(' + ')
     components << " - #{number_to_currency(charge.discount.abs)} discount" if charge.discount != 0
     charge_params = {
-      user_id: charge.contact_venmo_user_id,
+      user_id: charge.venmo_id,
       note: [self.restaurant, components].join(' | '),
       amount: charge.total.abs * -1
     }
@@ -57,7 +58,7 @@ class Order < ActiveRecord::Base
       select("string_agg(memo, ', ') as memo, sum(subtotal + tax + tip + discount) as total, sum(subtotal) as subtotal, sum(tax) as tax, sum(tip) as tip, sum(discount) as discount, charges.contact_id, contacts.contact_venmo_user_id").
       where("contacts.contact_venmo_user_id is not null").
       where('charges.venmo_payment_id is null').
-      group('charges.order_id, contacts.contact_venmo_user_id, charges.contact_id').
+      group('charges.order_id, contacts.venmo_id, charges.contact_id').
       all
   end
 

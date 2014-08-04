@@ -23,8 +23,8 @@ class Contact < ActiveRecord::Base
 
     def self.find_or_create_from_venmo venmo_user, json
       json.stringify_keys!
-      json['contact_venmo_user_id'] = json.delete('id')
-      contact = Contact.find_or_create_by(user_id: venmo_user.id, venmo_user_id: venmo_user.venmo_user_id, venmo_user_id: json['contact_venmo_user_id'])
+      json['venmo_id'] = json.delete('id')
+      contact = Contact.find_or_create_by(user_id: venmo_user.id, venmo_id: json['venmo_id'])
       json.reject! { |k,v| !Contact.column_names.include?(k.to_s) }
       contact.update_attributes(json)
       contact

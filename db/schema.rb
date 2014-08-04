@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140701035543) do
+ActiveRecord::Schema.define(version: 20140727230353) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,8 +32,7 @@ ActiveRecord::Schema.define(version: 20140701035543) do
 
   create_table "contacts", force: true do |t|
     t.integer  "user_id"
-    t.string   "venmo_user_id"
-    t.string   "contact_venmo_user_id"
+    t.string   "venmo_id"
     t.string   "username"
     t.string   "nickname"
     t.datetime "created_at"
@@ -54,8 +53,8 @@ ActiveRecord::Schema.define(version: 20140701035543) do
     t.float    "discount",      default: 0.0
   end
 
-  create_table "venmo_users", force: true do |t|
-    t.string   "venmo_user_id"
+  create_table "users", force: true do |t|
+    t.string   "venmo_id"
     t.string   "username"
     t.string   "first_name"
     t.string   "last_name"

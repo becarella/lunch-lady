@@ -13,6 +13,7 @@
 #  venmo_payment_id :string(255)
 #  tax              :float            default(0.0)
 #  tip              :float            default(0.0)
+#  discount         :float            default(0.0)
 #
 
 class Charge < ActiveRecord::Base

@@ -1,4 +1,4 @@
-class CreateVenmoUsers < ActiveRecord::Migration
+class CreateUsers < ActiveRecord::Migration
   def change
     create_table :venmo_users do |t|
       t.string      :venmo_user_id
