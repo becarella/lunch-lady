@@ -29,14 +29,11 @@ class LineItem < ActiveRecord::Base
   before_create :update_amounts
 
   def update_amounts
-    puts "UPDATE AMOUNTS #{order.inspect}"
     percentage = subtotal / order.subtotal
-    puts "PERCENTAGE: #{percentage}"
     self.tip = (order.tip * percentage).round(2)
     self.tax = (order.tax * percentage).round(2)
     self.delivery = (order.delivery * percentage).round(2)
     self.discount = (order.discount * percentage).round(2)
     self.total = (self.subtotal + self.tip + self.tax + self.delivery + self.discount).round(2)
-    puts "LINE ITEM: #{inspect}"
   end
 end
