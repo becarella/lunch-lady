@@ -4,7 +4,13 @@
 #
 #  id                 :integer          not null, primary key
 #  order_id           :integer
-#  subtotal           :integer
+#  charge_id          :integer
+#  subtotal           :float            default(0.0)
+#  tax                :float            default(0.0)
+#  tip                :float            default(0.0)
+#  delivery           :float            default(0.0)
+#  discount           :float            default(0.0)
+#  total              :float            default(0.0)
 #  charge_to_nickname :string(255)
 #  charge_to_venmo    :string(255)
 #  description        :text

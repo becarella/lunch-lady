@@ -5,7 +5,7 @@
 #  id                  :integer          not null, primary key
 #  user_id             :integer
 #  order_id            :integer
-#  subtotal            :float
+#  subtotal            :float            default(0.0)
 #  memo                :text
 #  created_at          :datetime
 #  updated_at          :datetime
@@ -16,6 +16,8 @@
 #  charged_by_venmo_id :string(255)
 #  payment_source      :string(255)
 #  payment_id          :string(255)
+#  delivery            :float            default(0.0)
+#  total               :float            default(0.0)
 #
 
 class Charge < ActiveRecord::Base
