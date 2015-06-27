@@ -14,4 +14,13 @@ class OrdersController < ApplicationController
       format.json { render json: @order, serializer: OrderSerializer }
     end
   end
+
+  def charge
+    @order = current_user.orders.find(params[:id])
+    @order.charge!
+    respond_to do |format|
+      format.html
+      format.json { render json: @order, serializer: OrderSerializer }
+    end
+  end
 end

@@ -26,7 +26,7 @@ class Order < ActiveRecord::Base
   has_many :line_items
 
 
-  def charge
+  def charge!
     # TODO:
     # Group uncharged line items
     # Create charges for line items
