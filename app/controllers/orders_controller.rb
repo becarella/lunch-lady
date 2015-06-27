@@ -1,9 +1,17 @@
 class OrdersController < ApplicationController
   def index
-    render json: current_user.orders.order("created_at desc"), each_serializer: OrderSerializer
+    @orders = current_user.orders.order("created_at desc")
+    respond_to do |format|
+      format.html
+      format.json { render json: @orders, each_serializer: OrderSerializer }
+    end
   end
 
   def show
-    render json: current_user.orders.find(params[:id]), serializer: OrderSerializer
+    @order = current_user.orders.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render json: @order, serializer: OrderSerializer }
+    end
   end
 end
