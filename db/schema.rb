@@ -11,23 +11,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140727230353) do
+ActiveRecord::Schema.define(version: 20150627151555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "charges", force: true do |t|
     t.integer  "user_id"
-    t.integer  "contact_id"
     t.integer  "order_id"
     t.float    "subtotal"
     t.text     "memo"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "venmo_payment_id"
-    t.float    "tax",              default: 0.0
-    t.float    "tip",              default: 0.0
-    t.float    "discount",         default: 0.0
+    t.float    "tax",                 default: 0.0
+    t.float    "tip",                 default: 0.0
+    t.float    "discount",            default: 0.0
+    t.string   "charged_to_venmo_id"
+    t.string   "charged_by_venmo_id"
+    t.string   "payment_source"
+    t.string   "payment_id"
+  end
+
+  create_table "charges_line_items", id: false, force: true do |t|
+    t.integer "charge_id",    null: false
+    t.integer "line_item_id", null: false
   end
 
   create_table "contacts", force: true do |t|
@@ -35,6 +42,16 @@ ActiveRecord::Schema.define(version: 20140727230353) do
     t.string   "venmo_id"
     t.string   "username"
     t.string   "nickname"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "line_items", force: true do |t|
+    t.integer  "order_id"
+    t.integer  "subtotal"
+    t.string   "charge_to_nickname"
+    t.string   "charge_to_venmo"
+    t.text     "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
