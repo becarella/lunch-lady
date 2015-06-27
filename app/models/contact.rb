@@ -2,14 +2,13 @@
 #
 # Table name: contacts
 #
-#  id                    :integer          not null, primary key
-#  user_id               :integer
-#  venmo_user_id         :string(255)
-#  contact_venmo_user_id :string(255)
-#  username              :string(255)
-#  nickname              :string(255)
-#  created_at            :datetime
-#  updated_at            :datetime
+#  id         :integer          not null, primary key
+#  user_id    :integer
+#  venmo_id   :string(255)
+#  username   :string(255)
+#  nickname   :string(255)
+#  created_at :datetime
+#  updated_at :datetime
 #
 
 class Contact < ActiveRecord::Base

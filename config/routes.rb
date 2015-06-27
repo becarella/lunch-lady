@@ -57,15 +57,16 @@ Rails.application.routes.draw do
 
   match ':any', :constraints => {:any => /.*/}, :via => 'options', :to => "application#cors_preflight_check"
 
-  resources :orders
-  post '/orders/new_email' => 'orders#new_email'
-
-  resources :users, only: [:show, :update] do
-    resources :contacts, only: [:index] do
-      post '/sync' => 'contacts#sync', on: :collection
+  resources :orders, only: [:index, :show] do
+    member do
+      post '/charge' => 'orders#charge'
     end
   end
-  get '/users/me' => 'venmo_users#show'
+
+  resources :line_items, only: [:update]
+
+  resources :users, only: [:show, :update]
+  get '/users/me' => 'users#show', as: :me
 
   get '/venmo/authorize'  => 'venmo#authorize'
   get '/venmo/callback'  => 'venmo#callback', as: :venmo_callback

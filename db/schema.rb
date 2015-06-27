@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150627151555) do
+ActiveRecord::Schema.define(version: 20150627164946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20150627151555) do
   create_table "charges", force: true do |t|
     t.integer  "user_id"
     t.integer  "order_id"
-    t.float    "subtotal"
+    t.float    "subtotal",            default: 0.0
     t.text     "memo"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -30,11 +30,8 @@ ActiveRecord::Schema.define(version: 20150627151555) do
     t.string   "charged_by_venmo_id"
     t.string   "payment_source"
     t.string   "payment_id"
-  end
-
-  create_table "charges_line_items", id: false, force: true do |t|
-    t.integer "charge_id",    null: false
-    t.integer "line_item_id", null: false
+    t.float    "delivery",            default: 0.0
+    t.float    "total",               default: 0.0
   end
 
   create_table "contacts", force: true do |t|
@@ -48,7 +45,13 @@ ActiveRecord::Schema.define(version: 20150627151555) do
 
   create_table "line_items", force: true do |t|
     t.integer  "order_id"
-    t.integer  "subtotal"
+    t.integer  "charge_id"
+    t.float    "subtotal",           default: 0.0
+    t.float    "tax",                default: 0.0
+    t.float    "tip",                default: 0.0
+    t.float    "delivery",           default: 0.0
+    t.float    "discount",           default: 0.0
+    t.float    "total",              default: 0.0
     t.string   "charge_to_nickname"
     t.string   "charge_to_venmo"
     t.text     "description"
@@ -62,12 +65,14 @@ ActiveRecord::Schema.define(version: 20150627151555) do
     t.text     "original_text"
     t.string   "restaurant"
     t.string   "order_number"
-    t.float    "total"
-    t.float    "tip"
-    t.float    "tax"
+    t.float    "total",         default: 0.0
+    t.float    "tip",           default: 0.0
+    t.float    "tax",           default: 0.0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.float    "discount",      default: 0.0
+    t.float    "delivery",      default: 0.0
+    t.float    "subtotal",      default: 0.0
   end
 
   create_table "users", force: true do |t|
