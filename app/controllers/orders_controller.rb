@@ -1,14 +1,26 @@
 class OrdersController < ApplicationController
-
-  def new_email
-    user = User.find_by_email(params[:envelope][:from])
-    order = Order.from_seamless!(user, params[:html])
-    order.charge_new
-    render json: params
-  end
-
   def index
-    render json: current_user.orders.order("created_at desc")
+    @orders = current_user.orders.order("created_at desc")
+    respond_to do |format|
+      format.html
+      format.json { render json: @orders, each_serializer: OrderSerializer }
+    end
   end
 
+  def show
+    @order = current_user.orders.find(params[:id])
+    respond_to do |format|
+      format.html
+      format.json { render json: @order, serializer: OrderSerializer }
+    end
+  end
+
+  def charge
+    @order = current_user.orders.find(params[:id])
+    @order.charge!
+    respond_to do |format|
+      format.html
+      format.json { render json: @order, serializer: OrderSerializer }
+    end
+  end
 end

@@ -4,7 +4,11 @@ class UsersController < ApplicationController
   respond_to :json
 
   def show
-    render json: current_user
+    @user = current_user
+    respond_to do |format|
+      format.html
+      format.json { render json: @user, serializer: UserSerializer }
+    end
   end
 
 end

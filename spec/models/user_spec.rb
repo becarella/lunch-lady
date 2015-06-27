@@ -1,9 +1,9 @@
 # == Schema Information
 #
-# Table name: venmo_users
+# Table name: users
 #
 #  id                      :integer          not null, primary key
-#  venmo_user_id           :string(255)
+#  venmo_id                :string(255)
 #  username                :string(255)
 #  first_name              :string(255)
 #  last_name               :string(255)
