@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   match ':any', :constraints => {:any => /.*/}, :via => 'options', :to => "application#cors_preflight_check"
 
-  resources :orders, only: [:index, :show] do
+  resources :orders, only: [:index, :show, :create] do
     member do
       post '/charge' => 'orders#charge'
     end

@@ -36,13 +36,11 @@ class Seamless
       order_json[:user_id] = user.id
       order = Order.find_or_create_by(order_json)
       json[:items].each do |item_json|
-        item_json = json.dup.reject { |k,v| !LineItem.column_names.include?(k.to_s) }
-        item_json[:order_id] = order.id
-        puts "ITEM JSON: #{item_json.inspect}"
-        order.line_items << LineItem.find_or_create_by(item_json)
+        item_json = item_json.dup.reject { |k,v| !LineItem.column_names.include?(k.to_s) }
+        order.line_items.find_or_create_by(item_json)
       end
     end
-    order.reload
+    order
   end
 
   def parse_text
@@ -67,13 +65,19 @@ class Seamless
     items = [];
     count = 0;
     doc.search("[text()*='$']").first.ancestors('table').first.ancestors('tbody').first.search('> tr').each do |node|
+      begin
+        nickname = node.search("[text()*='Special Instructions']").first.content.strip.match(/\b[A-Z]+\b/)[0]
+      rescue
+        nickname = nil
+      end
+      description = node.search('td')[2].content.strip
+      subtotal = node.search('td')[3].content.strip.gsub('$', '').to_f
       items.push({
-        charge_to_nickname: node.search("[text()*='Special Instructions']").first.content.strip.match(/\b[A-Z]+\b/)[0],
-        description: node.search('td')[1].content.strip,
-        subtotal: node.search('td')[2].content.strip.gsub('$', '').to_f
+        charge_to_nickname: nickname,
+        description: description,
+        subtotal: subtotal
       })
     end
-    puts "ITEMS: #{items.inspect}"
     data[:items] = items
     data
   end

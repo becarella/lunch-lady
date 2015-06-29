@@ -7,7 +7,7 @@ describe OrdersController do
     before do
       @user = User.create(email: 'becarella@gmail.com')
 
-      post :new_email, {
+      post :create, {
         envelope: {
           from: 'becarella@gmail.com', 
           to: 'test@example.com'
@@ -15,7 +15,7 @@ describe OrdersController do
         headers: {
           subject: 'cheers!'
         }, 
-        html: File.read("#{Rails.root}/spec/files/seamless_order_494593308.html")
+        html: File.read("#{Rails.root}/spec/files/seamless_order_411296010.html")
       }
     end
 
