@@ -27,7 +27,6 @@ class OrdersController < ApplicationController
   end
 
   def create
-    Rails.logger.info "#{params.inspect}"
     Seamless.new(params[:html], User.find_by_email(params[:envelope][:from])).parse
     render :text => 'success', :status => 200 # a status of 404 would reject the mail
   end
