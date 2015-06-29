@@ -1,5 +1,5 @@
 class OrdersController < ApplicationController
-  skip_before_filter :verify_authenticity_token, only: [:create]
+  skip_before_filter :verify_authenticity_token, except: [:create]
 
   def index
     @orders = current_user.orders.order("created_at desc")
@@ -27,7 +27,6 @@ class OrdersController < ApplicationController
   end
 
   def create
-    Rails.logger.info "#{params.inspect}"
     Rails.logger.info "#{params.inspect}"
     Seamless.new(params[:html], User.find_by_email(params[:envelope][:from])).parse
     render :text => 'success', :status => 200 # a status of 404 would reject the mail
