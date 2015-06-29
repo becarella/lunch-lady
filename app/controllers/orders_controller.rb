@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+  skip_before_filter :verify_authenticity_token, except: [:create]
+
   def index
     @orders = current_user.orders.order("created_at desc")
     respond_to do |format|
@@ -22,5 +24,10 @@ class OrdersController < ApplicationController
       format.html
       format.json { render json: @order, serializer: OrderSerializer }
     end
+  end
+
+  def create
+    Seamless.new(params[:html], User.find_by_email(params[:envelope][:from])).parse
+    render :text => 'success', :status => 200 # a status of 404 would reject the mail
   end
 end
